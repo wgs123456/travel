@@ -1,0 +1,119 @@
+<!-- 头部 start -->
+<script src="js/getParameter.js"></script>
+<script>
+
+
+    $(function () {
+
+        $.post("user/welcome",function (data) {
+            if (data != null){
+                $(".login_out").hide();
+                $(".login").show();
+                $("#span_wel").html("欢迎回来:"+data.name);
+            }else {
+                //  $("#span_wel").html("您尚未登陆");
+                $(".login_out").show();
+                $(".login").hide();
+            }
+
+        },"json");
+        //异步请求获取Cname
+        var str = "<li class=\"nav-active\"><a href=\"index.html\">首页</a></li>";
+        $.post("category/findAll",function (data) {
+            for(var i =0 ;i<data.length;i++){
+                str += "<li><a href='route_list.html?cid="+data[i].cid+"'>"+data[i].cname+"</a></li>";
+                //str += '<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+            }
+            str += "<li><a href='favoriterank.html'>收藏排行榜</a></li>";
+            $("#li_cname").html(str);
+        },"json");
+
+        //为退出绑定单击事件
+        $("#a_exit").click(function () {
+            $.post("/user/exit",function () {
+                location.href="index.html";
+            })
+        });
+
+        //为搜索绑定单击事件
+        $("#search_btn").click(function () {
+            var rname = $("#search_input").val();
+            var cid = getParameter("cid");
+
+
+            //location.href = "http://localhost/route_list.html?cid="+cid+"&rname="+rname;
+            location.href = "route_list.html?cid="+cid+"&rname="+rname;
+         //   var cid = getParameter("cid");
+        });
+
+        /*var rname = decodeURI(getParameter("rname"));
+        if ( !"null".equals(rname)){
+            $("#search_input").val(rname);
+        }else {
+            $("#search_input").val("");
+        }*/
+        var u_rname = getParameter("rname");
+        if (u_rname != null){
+            $("#search_input").val(decodeURI(u_rname));
+        }
+
+    });
+
+</script>
+    <header id="header">
+        <div class="top_banner">
+            <img src="images/top_banner.jpg" alt="">
+        </div>
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out">
+                <a href="login.html">登录</a>
+                <a href="register.html">注册</a>
+            </div>
+            <!-- 登录状态  -->
+
+            <div class="login">
+                <span id="span_wel"></span>
+                <a href="myfavorite.html" class="collection">我的收藏</a>
+                <a href="javascript:" id="a_exit">退出</a>
+            </div>
+
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/"><img src="images/logo.jpg" alt=""></a>
+                </div>
+                <div class="search">
+                    <input id="search_input" name="search_input" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a id="search_btn" href="javascript:" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav" id="li_cname">
+            <li class="nav-active"><a href="index.html">首页</a></li>
+            <!--<li><a href="route_list.html">门票</a></li>-->
+            <!--<li><a href="route_list.html">酒店</a></li>-->
+            <!--<li><a href="route_list.html">香港车票</a></li>-->
+            <!--<li><a href="route_list.html">出境游</a></li>-->
+            <!--<li><a href="route_list.html">国内游</a></li>-->
+            <!--<li><a href="route_list.html">港澳游</a></li>-->
+            <!--<li><a href="route_list.html">抱团定制</a></li>-->
+            <!--<li><a href="route_list.html">全球自由行</a></li>-->
+            <!--<li><a href="favoriterank.html">收藏排行榜</a></li>-->
+        </ul>
+    </div>
+    
